@@ -1,2 +1,2 @@
 export { TopTabs, default } from './TopTabs.native'
-export type { TopTabsProps, TopTabsVariant, TopTabsSize } from './TopTabs.types'
+export type { TopTabsProps } from './TopTabs.types'

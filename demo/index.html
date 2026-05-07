@@ -13,69 +13,167 @@
     background: var(--ak-bg);
     color: var(--ak-fg);
     margin: 0;
-    padding: var(--ak-space-6);
+    padding: 0 0 var(--ak-space-16);
     max-width: 760px;
     margin-inline: auto;
   }
-  h1 { font-size: var(--ak-text-2xl); font-weight: var(--ak-weight-semibold); letter-spacing: var(--ak-tracking-tight); margin: 0 0 var(--ak-space-2); }
+  .pad { padding: 0 var(--ak-space-6); }
+  h1 { font-size: var(--ak-text-2xl); font-weight: var(--ak-weight-semibold); letter-spacing: var(--ak-tracking-tight); margin: var(--ak-space-6) 0 var(--ak-space-2); }
   .sub { color: var(--ak-fg-subtle); font-size: var(--ak-text-sm); margin-bottom: var(--ak-space-8); }
   h2 { font-size: var(--ak-text-md); font-weight: var(--ak-weight-semibold); margin: var(--ak-space-8) 0 var(--ak-space-3); }
-  .row { display: flex; gap: var(--ak-space-3); flex-wrap: wrap; align-items: center; padding: var(--ak-space-3); background: var(--ak-bg-subtle); border-radius: var(--ak-radius-md); }
-  .toggle { position: fixed; top: 16px; right: 16px; padding: 8px 12px; border-radius: var(--ak-radius-full); background: var(--ak-fg); color: var(--ak-bg); border: 0; font-size: var(--ak-text-sm); cursor: pointer; }
+  .stage {
+    border: 1px solid var(--ak-border-subtle);
+    border-radius: var(--ak-radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--ak-space-4);
+    background: var(--ak-bg);
+  }
+  .stage .body {
+    padding: var(--ak-space-4);
+    color: var(--ak-fg-subtle);
+    font-size: var(--ak-text-sm);
+    min-height: 80px;
+  }
+  /* demo 内 sticky 不跟页面滚 · 让多个 demo 同屏可见 */
+  .stage .ak-top-tabs { position: relative; padding-top: 0; }
+  .icon-btn {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; border: 0; cursor: pointer;
+    color: var(--ak-fg); font-size: 20px;
+    border-radius: var(--ak-radius-full);
+  }
+  .icon-btn:hover { background: var(--ak-bg-hover); }
+  .toggle { position: fixed; top: 16px; right: 16px; padding: 8px 12px; border-radius: var(--ak-radius-full); background: var(--ak-fg); color: var(--ak-bg); border: 0; font-size: var(--ak-text-sm); cursor: pointer; z-index: 100; }
 </style>
 </head>
 <body>
   <button class="toggle" id="t">切换暗色</button>
-  <h1>akong TopTabs</h1>
-  <p class="sub">5 variant · 3 size · 跨 Web/RN · 真值跨端 · 一份 props</p>
 
-  <h2>Variants (size=md)</h2>
-  <div class="row">
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--md"><span>Primary</span></button>
-    <button class="ak-top-tabs ak-top-tabs--secondary ak-top-tabs--md"><span>Secondary</span></button>
-    <button class="ak-top-tabs ak-top-tabs--ghost ak-top-tabs--md"><span>Ghost</span></button>
-    <button class="ak-top-tabs ak-top-tabs--destructive ak-top-tabs--md"><span>Destructive</span></button>
-    <button class="ak-top-tabs ak-top-tabs--link"><span>Link</span></button>
+  <div class="pad">
+    <h1>akong TopTabs</h1>
+    <p class="sub">sticky 顶部 tab 切换 · 类小红书"关注 / 发现 / 附近" · 跨 Web/RN · 一份 props</p>
+
+    <h2>标准 3 tab</h2>
+  </div>
+  <div class="stage" id="s1">
+    <div class="ak-top-tabs" role="tablist" aria-label="顶部 tabs">
+      <div class="ak-top-tabs__bar">
+        <div class="ak-top-tabs__slot ak-top-tabs__slot--leading"></div>
+        <div class="ak-top-tabs__tabs">
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="0"><span class="ak-top-tabs__label">关注</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="true" tabindex="0" class="ak-top-tabs__tab ak-top-tabs__tab--active" data-i="1"><span class="ak-top-tabs__label">发现</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="2"><span class="ak-top-tabs__label">附近</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+        </div>
+        <div class="ak-top-tabs__slot ak-top-tabs__slot--trailing"></div>
+      </div>
+    </div>
+    <div class="body" id="s1-body">当前 active: 发现</div>
   </div>
 
-  <h2>Sizes (variant=primary)</h2>
-  <div class="row">
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--sm"><span>Small</span></button>
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--md"><span>Medium</span></button>
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--lg"><span>Large</span></button>
+  <div class="pad"><h2>5 tab 长版本</h2></div>
+  <div class="stage" id="s2">
+    <div class="ak-top-tabs" role="tablist" aria-label="顶部 tabs">
+      <div class="ak-top-tabs__bar">
+        <div class="ak-top-tabs__slot ak-top-tabs__slot--leading"></div>
+        <div class="ak-top-tabs__tabs">
+          <button type="button" role="tab" aria-selected="true" tabindex="0" class="ak-top-tabs__tab ak-top-tabs__tab--active" data-i="0"><span class="ak-top-tabs__label">关注</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="1"><span class="ak-top-tabs__label">发现</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="2"><span class="ak-top-tabs__label">附近</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="3"><span class="ak-top-tabs__label">直播</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="4"><span class="ak-top-tabs__label">视频</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+        </div>
+        <div class="ak-top-tabs__slot ak-top-tabs__slot--trailing"></div>
+      </div>
+    </div>
+    <div class="body" id="s2-body">当前 active: 关注</div>
   </div>
 
-  <h2>States</h2>
-  <div class="row">
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--md"><span>Default</span></button>
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--md ak-top-tabs--loading"><span>Loading</span></button>
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--md" disabled><span>Disabled</span></button>
+  <div class="pad"><h2>带 leading + trailing slot</h2></div>
+  <div class="stage" id="s3">
+    <div class="ak-top-tabs" role="tablist" aria-label="顶部 tabs">
+      <div class="ak-top-tabs__bar">
+        <div class="ak-top-tabs__slot ak-top-tabs__slot--leading">
+          <button type="button" class="icon-btn" aria-label="菜单">☰</button>
+        </div>
+        <div class="ak-top-tabs__tabs">
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="0"><span class="ak-top-tabs__label">关注</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="true" tabindex="0" class="ak-top-tabs__tab ak-top-tabs__tab--active" data-i="1"><span class="ak-top-tabs__label">发现</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+          <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="2"><span class="ak-top-tabs__label">附近</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+        </div>
+        <div class="ak-top-tabs__slot ak-top-tabs__slot--trailing">
+          <button type="button" class="icon-btn" aria-label="搜索">🔍</button>
+        </div>
+      </div>
+    </div>
+    <div class="body" id="s3-body">当前 active: 发现</div>
   </div>
 
-  <h2>With Icons</h2>
-  <div class="row">
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--md">
-      <span class="ak-top-tabs__icon">+</span>
-      <span>Add</span>
-    </button>
-    <button class="ak-top-tabs ak-top-tabs--secondary ak-top-tabs--md">
-      <span>Next</span>
-      <span class="ak-top-tabs__icon">→</span>
-    </button>
-    <button class="ak-top-tabs ak-top-tabs--ghost ak-top-tabs--md" aria-label="search">
-      <span class="ak-top-tabs__icon">🔍</span>
-    </button>
+  <div class="pad"><h2>真 sticky · 滑下面看顶部跟随</h2></div>
+  <div class="ak-top-tabs" role="tablist" aria-label="sticky 顶部 tabs" id="sticky">
+    <div class="ak-top-tabs__bar">
+      <div class="ak-top-tabs__slot ak-top-tabs__slot--leading">
+        <button type="button" class="icon-btn" aria-label="菜单">☰</button>
+      </div>
+      <div class="ak-top-tabs__tabs">
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="0"><span class="ak-top-tabs__label">关注</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+        <button type="button" role="tab" aria-selected="true" tabindex="0" class="ak-top-tabs__tab ak-top-tabs__tab--active" data-i="1"><span class="ak-top-tabs__label">发现</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+        <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ak-top-tabs__tab" data-i="2"><span class="ak-top-tabs__label">附近</span><span class="ak-top-tabs__underline" aria-hidden="true"></span></button>
+      </div>
+      <div class="ak-top-tabs__slot ak-top-tabs__slot--trailing">
+        <button type="button" class="icon-btn" aria-label="搜索">🔍</button>
+      </div>
+    </div>
   </div>
-
-  <h2>Full width</h2>
-  <div class="row" style="display: block;">
-    <button class="ak-top-tabs ak-top-tabs--primary ak-top-tabs--md ak-top-tabs--full-width"><span>占满整行</span></button>
+  <div class="pad" style="padding-top: var(--ak-space-4);">
+    <p class="sub">下面这些卡片填满高度 · 上滑能看到顶部 tabs 真 sticky 跟随。</p>
+    <div style="display: grid; gap: 12px;">
+      <div style="height: 200px; background: var(--ak-bg-subtle); border-radius: 12px;"></div>
+      <div style="height: 200px; background: var(--ak-bg-subtle); border-radius: 12px;"></div>
+      <div style="height: 200px; background: var(--ak-bg-subtle); border-radius: 12px;"></div>
+      <div style="height: 200px; background: var(--ak-bg-subtle); border-radius: 12px;"></div>
+      <div style="height: 200px; background: var(--ak-bg-subtle); border-radius: 12px;"></div>
+    </div>
   </div>
 
 <script>
+  // 暗色 toggle
   document.getElementById('t').onclick = () => {
     document.documentElement.classList.toggle('dark')
   }
+
+  // 各 stage 内点 tab 切 active · 模拟受控 onChange
+  function wireStage(stageId, bodyId, labels) {
+    const stage = document.getElementById(stageId)
+    const body = document.getElementById(bodyId)
+    stage.querySelectorAll('.ak-top-tabs__tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const i = Number(btn.dataset.i)
+        stage.querySelectorAll('.ak-top-tabs__tab').forEach((b, j) => {
+          const active = i === j
+          b.classList.toggle('ak-top-tabs__tab--active', active)
+          b.setAttribute('aria-selected', String(active))
+          b.setAttribute('tabindex', active ? '0' : '-1')
+        })
+        if (body) body.textContent = '当前 active: ' + labels[i]
+      })
+    })
+  }
+  wireStage('s1', 's1-body', ['关注', '发现', '附近'])
+  wireStage('s2', 's2-body', ['关注', '发现', '附近', '直播', '视频'])
+  wireStage('s3', 's3-body', ['关注', '发现', '附近'])
+
+  // sticky demo
+  document.querySelectorAll('#sticky .ak-top-tabs__tab').forEach((btn, i, all) => {
+    btn.addEventListener('click', () => {
+      all.forEach((b, j) => {
+        const active = i === j
+        b.classList.toggle('ak-top-tabs__tab--active', active)
+        b.setAttribute('aria-selected', String(active))
+        b.setAttribute('tabindex', active ? '0' : '-1')
+      })
+    })
+  })
 </script>
 </body>
 </html>

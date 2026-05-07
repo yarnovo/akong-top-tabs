@@ -1,22 +1,16 @@
 import type { ReactNode } from 'react'
 
-export type TopTabsVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'link'
-export type TopTabsSize = 'sm' | 'md' | 'lg'
-
 export interface TopTabsProps {
-  variant?: TopTabsVariant
-  size?: TopTabsSize
-  disabled?: boolean
-  loading?: boolean
-  fullWidth?: boolean
-  iconLeft?: ReactNode
-  iconRight?: ReactNode
-  children?: ReactNode
-  onClick?: () => void
-  /** RN 用 onPress · Web 自动用 onClick · 跨端写法可同时传 */
-  onPress?: () => void
-  /** Web 提交表单等 · RN 忽略 */
-  type?: 'button' | 'submit' | 'reset'
-  /** a11y */
+  /** tab 文案列表 · 顺序即展示顺序 */
+  tabs: string[]
+  /** 受控当前激活下标 · 越界视为无激活 */
+  activeIndex: number
+  /** 切换回调 · 点 tab 时触发 (即使点的就是当前 active 也会触发 · 调用方自行判等) */
+  onChange: (index: number) => void
+  /** 左侧 slot · 比如 ☰ 菜单 · 不传则不渲染左侧占位 */
+  leading?: ReactNode
+  /** 右侧 slot · 比如 🔍 搜索 · 不传则不渲染右侧占位 */
+  trailing?: ReactNode
+  /** a11y · 默认 '顶部 tabs' */
   ariaLabel?: string
 }

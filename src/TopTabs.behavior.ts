@@ -1,39 +1,48 @@
 /**
  * 跨端行为契约 · Web + RN 都遵循
  *
- * 写法是"给定 props · 期望 · 该发生 / 不该发生"的纯描述
+ * "给定 props · 模拟点哪个 tab · 期望 onChange 收到哪个 index" 的纯描述
  * 各端测试 import 这份 spec 跑 · 行为强一致
  */
 
-export type Outcome = 'callback-fired' | 'callback-skipped'
-
 export interface Scenario {
   name: string
-  props: { disabled?: boolean; loading?: boolean }
-  /** 模拟一次"按下" · 期望结果 */
-  onPressOutcome: Outcome
+  tabs: string[]
+  activeIndex: number
+  /** 模拟点击的下标 */
+  pressIndex: number
+  /** 期望 onChange 收到的 index · null = 不该触发 (越界场景) */
+  expectIndex: number | null
 }
 
 /** 共享场景 · Web + RN 都跑 */
-export const buttonScenarios: Scenario[] = [
+export const topTabsScenarios: Scenario[] = [
   {
-    name: 'default · 按下触发回调',
-    props: {},
-    onPressOutcome: 'callback-fired',
+    name: '点非 active tab · onChange 收到点击的 index',
+    tabs: ['关注', '发现', '附近'],
+    activeIndex: 0,
+    pressIndex: 1,
+    expectIndex: 1,
   },
   {
-    name: 'disabled · 按下不触发',
-    props: { disabled: true },
-    onPressOutcome: 'callback-skipped',
+    name: '点最后一个 tab · onChange 收到最后下标',
+    tabs: ['关注', '发现', '附近'],
+    activeIndex: 0,
+    pressIndex: 2,
+    expectIndex: 2,
   },
   {
-    name: 'loading · 按下不触发',
-    props: { loading: true },
-    onPressOutcome: 'callback-skipped',
+    name: '点当前 active tab · onChange 仍触发 (调用方自行判等)',
+    tabs: ['关注', '发现', '附近'],
+    activeIndex: 1,
+    pressIndex: 1,
+    expectIndex: 1,
   },
   {
-    name: 'disabled + loading · 按下不触发',
-    props: { disabled: true, loading: true },
-    onPressOutcome: 'callback-skipped',
+    name: '5 tab 长版本 · 点中间',
+    tabs: ['关注', '发现', '附近', '直播', '视频'],
+    activeIndex: 0,
+    pressIndex: 2,
+    expectIndex: 2,
   },
 ]
