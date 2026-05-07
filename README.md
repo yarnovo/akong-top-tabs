@@ -1,6 +1,6 @@
 # @akong/top-tabs
 
-akong TopTabs · 极简 · 跨端 (Web + React Native)
+akong TopTabs · sticky 顶部 tab 切换 · 类小红书"关注 / 发现 / 附近" · 跨端 (Web + React Native)
 
 ## Demo
 
@@ -19,11 +19,15 @@ import { TopTabs } from '@akong/top-tabs'
 import '@akong/top-tabs/style.css'
 import '@akong/tokens/style.css'  // 顶层引一次 token (整个 app 共用)
 
-<TopTabs variant="primary" size="md" onClick={...}>下单</TopTabs>
-<TopTabs variant="secondary" loading>处理中</TopTabs>
-<TopTabs variant="ghost" iconLeft={<Plus />}>新建</TopTabs>
-<TopTabs variant="destructive" disabled>删除</TopTabs>
-<TopTabs variant="link">查看详情</TopTabs>
+const [active, setActive] = useState(0)
+
+<TopTabs
+  tabs={['关注', '发现', '附近']}
+  activeIndex={active}
+  onChange={setActive}
+  leading={<button aria-label="菜单">☰</button>}
+  trailing={<button aria-label="搜索">🔍</button>}
+/>
 ```
 
 ## React Native
@@ -31,7 +35,11 @@ import '@akong/tokens/style.css'  // 顶层引一次 token (整个 app 共用)
 ```tsx
 import { TopTabs } from '@akong/top-tabs'
 
-<TopTabs variant="primary" size="md" onPress={...}>下单</TopTabs>
+<TopTabs
+  tabs={['关注', '发现', '附近']}
+  activeIndex={active}
+  onChange={setActive}
+/>
 ```
 
 Metro bundler 自动按 `.native.tsx` 后缀解析 · 同 `import` 路径两端通用。
@@ -40,30 +48,28 @@ Metro bundler 自动按 `.native.tsx` 后缀解析 · 同 `import` 路径两端�
 
 | Prop | Type | Default | 说明 |
 |---|---|---|---|
-| variant | `primary` / `secondary` / `ghost` / `destructive` / `link` | `primary` | |
-| size | `sm` / `md` / `lg` | `md` | |
-| disabled | boolean | false | |
-| loading | boolean | false | 转圈 + 锁交互 |
-| fullWidth | boolean | false | |
-| iconLeft / iconRight | ReactNode | — | |
-| onClick / onPress | () => void | — | Web 用 onClick · RN 用 onPress · 都传也行 |
-| ariaLabel | string | — | a11y |
+| tabs | `string[]` | — | tab 文案列表 · 顺序即展示顺序 |
+| activeIndex | `number` | — | 受控当前激活下标 · 越界视为无激活 |
+| onChange | `(index: number) => void` | — | 点 tab 触发 · 含点击当前 active |
+| leading | `ReactNode` | — | 左侧 slot · 比如 ☰ |
+| trailing | `ReactNode` | — | 右侧 slot · 比如 🔍 |
+| ariaLabel | `string` | `'顶部 tabs'` | a11y |
 
 ## 设计原则
 
 - **一份 props**：Web 跟 RN 共享 `TopTabs.types.ts`
-- **两端实现**：`TopTabs.tsx` (Web · DOM `<button>`) + `TopTabs.native.tsx` (RN · `<Pressable>`)
-- **触摸目标 ≥ 44pt**：所有 size 都满足 iOS HIG
-- **极简反馈**：active 0.7 opacity (不缩放 · 不晃)
+- **两端实现**：`TopTabs.tsx` (Web · 半透明 + backdrop-blur) + `TopTabs.native.tsx` (RN · `Animated.timing` 下划线)
+- **真 sticky**：Web `position: sticky; top: 0; z-index: var(--ak-z-sticky)`
+- **safe-top**：`padding-top: env(safe-area-inset-top)` 适配 iPhone 刘海
+- **触摸目标 ≥ 44pt**：每个 tab 跟 slot 都满足 iOS HIG
+- **极简反馈**：active 加粗 + 居中下划线 (4px × 2px · 圆角) · 0.15s ease-out 过渡
 - **token 100% 接 @akong/tokens**：改一处 token 自动 update
 
-## 状态
+## 视觉
 
-| 状态 | Web | RN |
-|---|---|---|
-| default | `:not(:active)` | `pressed: false` |
-| active | `:active` opacity 0.7 | `pressed: true` opacity 0.7 |
-| hover | `:hover` (桌面 only) | — |
-| disabled | `disabled` opacity 0.4 | `disabled` opacity 0.4 |
-| loading | `.ak-btn--loading` 转圈 | `<ActivityIndicator />` |
-| focus | `:focus-visible` outline | RN 默认 a11y focus |
+| 状态 | 文字色 | 字重 | 下划线 |
+|---|---|---|---|
+| active | `var(--ak-fg)` | `semibold` | 4px × 2px · 居中 |
+| 非 active | `var(--ak-fg-subtle)` | `regular` | 隐藏 |
+
+容器：`bg = color-mix(--ak-bg 85% + transparent)` + `backdrop-filter: blur(20px) saturate(180%)`，类 iOS UINavigationBar 半透明效果。
