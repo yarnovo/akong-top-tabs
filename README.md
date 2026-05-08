@@ -1,5 +1,7 @@
 # @akong/top-tabs
 
+> ← 回 [akong design system](https://yarnovo.github.io/akong-core/) 总站
+
 akong TopTabs · sticky 顶部 tab 切换 · 类小红书"关注 / 发现 / 附近" · 跨端 (Web + React Native)
 
 ## Demo
