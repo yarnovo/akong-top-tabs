@@ -2,12 +2,12 @@
  * akong TopTabs · React Native 实现
  *
  * Metro bundler 默认按 `.native.tsx` 后缀解析 RN 端 · `.tsx` 解析 Web 端
- * 用方 `import { TopTabs } from '@akong/top-tabs'` 自动取对应平台
+ * 用方 `import { TopTabs } from '@aily-ui/top-tabs'` 自动取对应平台
  */
 
 import { useEffect, useRef } from 'react'
 import { Animated, Pressable, Text, View, useColorScheme, Platform } from 'react-native'
-import { tokens } from '@akong/tokens'
+import { tokens } from '@aily-ui/tokens'
 import type { TopTabsProps } from './TopTabs.types'
 
 interface TabItemProps {
